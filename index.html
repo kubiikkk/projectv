@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V&K | V1.0 ♡</title>
+    <link rel = "stylesheet" href ="./css/style.css">
+    <script src = "https://kit.fontawesome.com/b79a57267f.js" crossorigin = "anonymous"></script>
+</head>
+<body>
+    <div id = "menu-border" class = "menu-border menu-border-mobile"></div>
+    <div id = "boot-screen"></div>
+    <div class = "wscreen-main">
+        <div class = "wscreen-content">
+            <div class = "wscreen">
+                <div id = "wscreen-title" class = "wscreen-title">
+                    <img src = "./assets/halftonelogo.png" class = "wscreen-image" alt = "V&K | V1.0">
+                </div>
+                <div class = "wscreen-start">
+                    <div class = "wscreen-start-container">
+                        <h2 id = "start-button" class = "wscreen-start-text">
+                            <span id = "start-icon" class = "start-arrow">›</span>
+                            <span id = "start-text">PRESS START</span>
+                        </h2>
+
+                        <div id="loading-container" class="loading-container">
+                            <div id="loading-bar" class="loading-bar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class = "wscreen-copyright">
+                    <div class = "wscreen-copyright-container">
+                        <h2 class = "wscreen-copyright-text">
+                            ©  2026  KUBI
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id = "main-menu" style = "display: none;">
+        <div class = "window" id = "window">
+
+            <div class = "window-header" id = "window-header">
+                <span>My OS</span>
+                <span class = "min-btn">_</span>
+                <span id = "close-btn">✕</span>
+            </div>
+
+            <div class = "window-content">
+                <div class = "icon" data-window = "memories">📁 Memories</div>
+                <div class = "icon" data-window = "photos">🖼 Photos</div>
+                <div class = "icon" data-window = "messages">💌 Messages</div>
+            </div>
+        </div>
+
+        <div class = "window hidden" id = "memories-window">
+            <div class = "window-header">
+                <span>Memories</span>
+                <div>
+                    <span class = "min-btn">_</span>
+                    <span class = "close-btn">✕</span>
+                </div>
+            </div>
+            <div class = "window-content">Memories content 💗</div>
+        </div>
+
+        <div id = "taskbar">
+            <div id = "taskbar-items"></div>
+        </div>
+    </div>
+
+    <script src = "./js/script.js" defer></script>
+</body>
+</html>
