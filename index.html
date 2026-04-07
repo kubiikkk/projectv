@@ -39,35 +39,386 @@
         </div>
     </div>
 
-    <div id = "main-menu" style = "display: none;">
-        <div class = "window" id = "window">
+    <div id="main-menu" style="display:none;">
 
-            <div class = "window-header" id = "window-header">
-                <span>My OS</span>
-                <span class = "min-btn">_</span>
-                <span id = "close-btn">✕</span>
+        <div id="wallpaper"></div>
+
+        <div id="desktop">
+            <div class="desktop-icon" data-window="memories">
+                <img src="assets/memories.gif">
+                <span>Memories</span>
             </div>
 
-            <div class = "window-content">
-                <div class = "icon" data-window = "memories">📁 Memories</div>
-                <div class = "icon" data-window = "photos">🖼 Photos</div>
-                <div class = "icon" data-window = "messages">💌 Messages</div>
+            <div class="desktop-icon" data-window="luckyclicker">
+                <img src="assets/luckyclicker.gif">
+                <span>Lucky Clicker</span>
+            </div>
+
+            <div class="desktop-icon" data-window="guessthesong">
+                <img src="assets/guessthesong.gif">
+                <span>Guess The Song</span>
+            </div>
+
+            <div class="desktop-icon" data-window="settings">
+                <img src="assets/settings.gif">
+                <span>Settings</span>
+            </div>
+
+            <div class="desktop-icon" data-window="secret">
+                <img src="assets/secret.gif">
+                <span>Secret</span>
+            </div>
+
+            <div class="desktop-icon" data-window="snake">
+                <img src="assets/snake.gif">
+                <span>Snake</span>
             </div>
         </div>
 
-        <div class = "window hidden" id = "memories-window">
-            <div class = "window-header">
+        <div class="window hidden" id="memories-window">
+            <div class="window-header">
                 <span>Memories</span>
                 <div>
-                    <span class = "min-btn">_</span>
-                    <span class = "close-btn">✕</span>
+                    <span class="min-btn">_</span>
+                    <span class="close-btn">✕</span>
                 </div>
             </div>
-            <div class = "window-content">Memories content 💗</div>
+            <div class="window-content memories-scroll">
+                <div class="timeline">
+
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>PRVNÍ SETKÁNÍ</h3>
+                                <span class = "date">10.5.2025</span>
+                                <hr>
+                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>TEST</h3>
+                                <span class = "date">10.3.2026</span>
+                                <hr>
+                                <p>TEST</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>PRVNÍ SETKÁNÍ</h3>
+                                <span class = "date">10.5.2025</span>
+                                <hr>
+                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>TEST</h3>
+                                <span class = "date">10.3.2026</span>
+                                <hr>
+                                <p>TEST</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>PRVNÍ SETKÁNÍ</h3>
+                                <span class = "date">10.5.2025</span>
+                                <hr>
+                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>TEST</h3>
+                                <span class = "date">10.3.2026</span>
+                                <hr>
+                                <p>TEST</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>PRVNÍ SETKÁNÍ</h3>
+                                <span class = "date">10.5.2025</span>
+                                <hr>
+                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>TEST</h3>
+                                <span class = "date">10.3.2026</span>
+                                <hr>
+                                <p>TEST</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>PRVNÍ SETKÁNÍ</h3>
+                                <span class = "date">10.5.2025</span>
+                                <hr>
+                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <div class = "timeline-photo">
+                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                            </div>
+                            <div class = "timeline-info">
+                                <h3>TEST</h3>
+                                <span class = "date">10.3.2026</span>
+                                <hr>
+                                <p>TEST</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
-        <div id = "taskbar">
-            <div id = "taskbar-items"></div>
+        <div id="luckyclicker-window" class="window hidden">
+            <div class="window-header">
+                <span>Lucky Clicker</span>
+                <div class="controls">
+                    <button class="min-btn">_</button>
+                    <button class="close-btn">X</button>
+                </div>
+            </div>
+
+            <div class="clicker-main-content">
+                <div class="clicker-left">
+                    <div class="clicker-stats">
+                        <div class="stat-item">
+                            <span id="click-count">0</span> <img src="assets/LC/currency.png" class="lcurrency">
+                        </div>
+                        <div class="stat-item">
+                            <p>Upgrades: <span id="upgrades-count">0</span></p>
+                        </div>
+                    </div>
+
+                    <img src="assets/LC/luckymain.png" id="click-target">
+
+                    <div class="progress-container">
+                        <div id="clicker-progress-bg" style="width: 100%; background: #333; height: 20px; border: 2px solid #00ff00;">
+                            <div id="clicker-progress" style="width: 0%; background: #00ff00; height: 100%;"></div>
+                        </div>
+                        <div id="progress-text" style="color: #00ff00; font-size: 10px; margin-top: 5px;">0 / 500,000</div>
+                    </div>
+                </div>
+
+                <div class="clicker-right">
+                    <div class="upgrade-list">
+                        <button class="upgrade-btn disabled" id="up-cursor" onclick="buyClickerUpgrade('clickupg')">
+                            <img src="assets/LC/soudicilucky.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Soudici Lucky </span><span class="up-desc">Diky svemu pohledu ti prida +1 za kliknuti.</span></div>
+                            <div class="up-cost" id="cost-clickupg">15 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-cpu" onclick="buyClickerUpgrade('cpsupg')">
+                            <img src="assets/LC/ninjalucky.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Ninja Lucky</span><span class="up-desc">Lucky ti vybojuje +2 automaticke kliky za sekundu.</span></div>
+                            <div class="up-cost" id="cost-cpsupg">100 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-heart" onclick="buyClickerUpgrade('multupg')">
+                            <img src="assets/LC/spinkajicilucky.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Spinkajici Lucky</span><span class="up-desc">Zda se ji o x1.5 nasobeni tvych kliku.</span></div>
+                            <div class="up-cost" id="cost-multupg">500 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-miner" onclick="buyClickerUpgrade('cpsupg2')">
+                            <img src="assets/LC/traumatizovanalucky.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Traumatizovana Lucky</span><span class="up-desc">Kvuli svemu traumatu ti prida +10 automatickych kliku za sekundu.</span></div>
+                            <div class="up-cost" id="cost-cpsupg2">2000 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-mega" onclick="buyClickerUpgrade('clickupg2')">
+                            <img src="assets/LC/nekuraklucky.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Nekurak Lucky</span><span class="up-desc">Zdrave plice Luckynky ti pridaji +50 za kliknuti.</span></div>
+                            <div class="up-cost" id="cost-clickupg2">5000 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-mega" onclick="buyClickerUpgrade('multupg2')">
+                            <img src="assets/LC/luckynkycumak.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Luckynky Cumak</span><span class="up-desc">Jeji studeny cumak ti prida x2.5 nasobeni tvych kliku.</span></div>
+                            <div class="up-cost" id="cost-multupg2">20000 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-mega" onclick="buyClickerUpgrade('clickupg3')">
+                            <img src="assets/LC/nevericilucky.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Neverici Lucky</span><span class="up-desc">Neveri ti, ale stejne ti prida +100 za kliknuti.</span></div>
+                            <div class="up-cost" id="cost-clickupg3">50000 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-mega" onclick="buyClickerUpgrade('cpsupg3')">
+                            <img src="assets/LC/vyvalenymax.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Vyvaleny Max</span><span class="up-desc">Je to felak a proda ti +50 automatickych kliknuti za sekundu.</span></div>
+                            <div class="up-cost" id="cost-cpsupg3">75000 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+
+                        <button class="upgrade-btn disabled" id="up-mega" onclick="buyClickerUpgrade('multupg3')">
+                            <img src="assets/LC/freakykejs.png" class="up-icon">
+                            <div class="up-info"><span class="up-name">Freaky Kejs</span><span class="up-desc">Asi jsi freaky jako Kejs a proto ti nabizi x5 nasobeni tvych kliku.</span></div>
+                            <div class="up-cost" id="cost-multupg3">100000 <img src="assets/LC/currency.png" class="lcurrency"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="clicker-win-screen" class="clicker-overlay hidden">
+                    <div class="win-box">
+                        <h2>GOAL REACHED! 🎉</h2>
+                        <p>Your Hint: <b>"IS"</b> ❤️</p>
+                        <button class="retro-btn" onclick="activateFreeMode()">ENABLE FREE MODE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window hidden" id="guessthesong-window"> 
+            <div class="window-header">
+                <span>Guess The Song</span>
+                <div><span class="min-btn">_</span><span class="close-btn">✕</span></div>
+            </div>
+            <div class="window-content" id="song-game-content">
+                <div id="song-start-screen">
+                    <button onclick="startSongGame()">START GAME</button>
+                </div>
+                <div id="song-play-screen" class="hidden">
+                    <p>Song <span id="song-index">1</span>/5</p>
+                    <audio id="game-audio" src=""></audio>
+                    <button onclick="document.getElementById('game-audio').play()">▶ Play Snippet</button>
+                    <input type="text" id="song-input" placeholder="Song title...">
+                    <button onclick="submitSong()">Submit</button>
+                </div>
+                <div id="song-result" class="hidden"></div>
+            </div>
+        </div>
+
+        <div class="window hidden" id="settings-window">
+            <div class="window-header">
+                <span>Settings</span>
+                <div>
+                    <span class="min-btn">_</span>
+                    <span class="close-btn">✕</span>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="wallpaper-grid">
+                    <div class="wp-preview" data-wallpaper="defaultwp.jpg" onclick="setWallpaper('defaultwp.jpg')">
+                        <img src="assets/WALLPAPERS/defaultwp.jpg">
+                        <span>Default</span>
+                    </div>
+                    <div class="wp-preview" data-wallpaper="purplewp.jpg" onclick="setWallpaper('purplewp.jpg')">
+                        <img src="assets/WALLPAPERS/purplewp.jpg">
+                        <span>Purple Night</span>
+                    </div>
+                    </div>
+                <hr>
+                <button id="sound-toggle-btn" class="task-item" onclick="toggleAllSounds()" style="width:100%">
+                    Sounds: ON
+                </button>
+            </div>
+        </div>
+
+        <div class="window hidden" id="secret-window">
+            <div class="window-header">
+                <span>Secret</span>
+                <div>
+                    <span class="min-btn">_</span>
+                    <span class="close-btn">✕</span>
+                </div>
+            </div>
+            <div id="error-box" class="error-box hidden">
+                <div class="error-content">
+                    <p>INCORRECT PASSWORD ❗</p>
+                    <button onclick="closeError()" class = "closepass">Close</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <input id="secret-input" placeholder="Enter password">
+                <button onclick="checkSecret()">Unlock</button>
+
+                <div id="secret-content" style="display:none;">
+                    <div class="long-message">
+                        <p>Tady bude tvoje opravdu dlouhá zpráva... [Text se scrollováním]</p>
+                        <div class="secret-actions">
+                            <a href="assets/secret.mp4" download class="btn-retro">SECRET VIDEO</a>
+                            <a href="assets/bonus.jpg" download class="btn-retro">BONUS PHOTO</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window hidden" id="snake-window">
+            <div class="window-header">
+                <span>Snake</span>
+                <div>
+                    <span class="min-btn">_</span>
+                    <span class="close-btn">✕</span>
+                </div>
+            </div>
+            <div class="window-content">
+                <canvas id="gameCanvas" width="300" height="300"></canvas>
+            </div>
+        </div>
+
+        <div id="taskbar">
+            <div id="taskbar-items"></div>
         </div>
     </div>
 

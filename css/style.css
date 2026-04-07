@@ -98,6 +98,7 @@
 /* ===== RESET ===== */
 * {
     font-family: "PressStart";
+    cursor: url("../assets/CURSOR/default.cur"), auto !important;
 }
 
 div {
@@ -108,10 +109,6 @@ div {
 html, body {
     height: 100%;
     margin: 0;
-}
-
-body {
-    cursor: url("../assets/cursor.png"), auto;
 }
 
 /* ===== BOOT SCREEN ===== */
@@ -226,14 +223,8 @@ img {
     width: 500px;
     text-align: center;
     display: inline-block;
-    cursor: pointer;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
     font-weight: normal;
-    user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
 }
 
 h2 {
@@ -256,6 +247,11 @@ h2 {
     animation: blinker 1s infinite;
 }
 
+.start-arrow:hover,
+#start-text:hover {
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
 button {
     border: 0;
     padding: 0;
@@ -264,7 +260,7 @@ button {
     font-family: inherit;
     color: inherit;
     font: inherit;
-    cursor: pointer;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
 }
 
 .wscreen-copyright {
@@ -339,60 +335,666 @@ button {
 .window {
     width: 400px;
     height: 600px;
+
+    resize: both;
+    overflow: hidden;
+    min-width: 250px;
+    min-height: 200px;
+
     background: #c0c0c0;
     border: 3px solid black;
     font-size: 12px;
-
     box-shadow: 4px 4px 0 black;
+
+    position: absolute;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.hidden {
+    display: none !important;
 }
 
 .window-header {
     background: #000080;
     color: white;
-    padding: 5px;
-
+    padding: 5px 10px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     cursor: grab;
+    user-select: none; 
+    flex-shrink: 0;
 }
 
 #close-btn {
-    cursor: pointer;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
 }
 
 .window-content {
-    padding: 15px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background: #c0c0c0;
+    display: block;
 }
 
 .icon {
     width: 80px;
     text-align: center;
-    cursor: pointer;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
 }
 
 /* ===== TASKBAR ===== */
 #taskbar {
     position: fixed;
-    bottom: 250px;
-    left: 0;
-    width: 100%;
+    left: 145px;
+    right: 145px;
+    bottom: 110px;
 
     height: 40px;
-    background: #222;
-    border-top: 3px solid black;
+
+    background: linear-gradient(#3a6ea5, #1f3f73);
+    border-top: 2px solid black;
 
     display: flex;
     align-items: center;
+
     padding: 5px;
+
+    z-index: 999;
+}
+
+#taskbar-items {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 50px;
+    width: 100%;
 }
 
 .task-item {
-    background: #444;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    background: #c0c0c0;
+    border: 2px solid black;
+
+    padding: 2px 8px;
+
+    font-size: 10px;
+    color: black;
+
+    white-space: nowrap;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.task-item span {
+    text-transform: capitalize;
+}
+
+.task-item:active {
+    background: #808080;
+}
+
+#wallpaper {
+    position: fixed;
+    inset: 0;
+    background: url("../assets/WALLPAPERS/defaultwp.jpg") center/cover no-repeat;
+    z-index: 0;
+}
+
+#desktop {
+    position: fixed;
+
+    top: 120px;
+    bottom: 120px;
+    left: 150px;
+    right: 150px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    padding: 20px;
+    gap: 20px;
+
+    z-index: 2;
+}
+
+.desktop-icon {
+    width: 80px;
+    text-align: center;
     color: white;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.desktop-icon img {
+    width: 75px;
+    display: block;
+    margin: 0 auto 5px;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.desktop-icon span {
+    font-size: 10px;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+/* ===== ERROR ===== */
+.error-box {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.error-content {
+    background: #c0c0c0;
+    padding: 20px;
+    border: 3px solid black;
+    text-align: center;
+}
+
+/* ===== SETTINGS PREVIEW ====== */
+.wallpaper-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 10px;
+}
+
+.wp-preview {
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+    padding: 5px;
+    background: #eee;
+    transition: all 0.2s;
+    border: 3px solid transparent;
+}
+
+.wp-preview.selected {
+    border: 2px solid #000080;
+    background: rgba(255,255,255,0.85);
+}
+
+.wp-preview:hover { transform: scale(1.02); }
+
+.wp-preview img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.wp-preview span {
+    font-size: 10px;
+    display: block;
+    text-align: center;
+}
+
+/* ===== LUCKY CLICKER ===== */
+#luckyclicker-window {
+    min-width: 700px;
+    min-height: 500px;
+    width: 900px;
+    height: 650px;
+    background: #2a2a2a;
+}
+
+.clicker-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+.clicker-header {
+    background: #1a1a1a;
+    border-bottom: 3px solid #00ff00;
+    padding: 15px;
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+    image-rendering: pixelated;
+}
+
+.stat-item {
+    font-family: "PressStart", sans-serif;
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    color: #00ff00;
+    font-weight: bold;
+    text-shadow: 0 0 8px #00ff00;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.stats-row span {
+    display: flex;
+    align-items: center;
+    font-family: "PressStart", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    background: #000;
+    padding: 5px 15px;
+    border: 1px solid #333;
+    gap: 8px;
+}
+
+.progress-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    z-index: 10;
+}
+
+.clicker-main {
+    display: flex;
+    flex: 1;
+}
+
+.clicker-main-content {
+    display: flex;
+    height: calc(100% - 30px);
+    width: 100%;
+    overflow: hidden;
+    background: #2a2a2a;
+}
+
+.clicker-stats {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #2a2a2a;
+    border-bottom: 2px solid #00ff00;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 20;
+    box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+}
+
+.clicker-left {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    
+    background: url('../assets/LC/lcbg1.gif');
+    background-size: cover;
+    background-position: center;
+}
+
+#click-target {
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+    transition: transform 0.1s;
+    z-index: 10;
+    max-width: 80%;
+    user-select: none;
+    -webkit-user-drag: none;
+    image-rendering: pixelated;
+    filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.2));
+    transition: transform 0.05s, filter 0.2s;
+}
+
+#click-target-container {
+    width: 80%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#click-target:active {
+    transform: scale(0.95);
+}
+
+.clicker-right {
+    flex: 1.2;
+    background: #2a2a2a;
+    border-left: 3px solid #00ff00;
+    padding: 15px;
+    
+    overflow-y: auto; 
+    overflow-x: hidden;
+    height: 100%;
+
+    padding-bottom: 50px;
+}
+
+/* SCROLLBAR */
+.clicker-right::-webkit-scrollbar {
+    width: 12px;
+}
+
+.clicker-right::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border: 1px solid #00ff00;
+}
+
+.clicker-right::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border: 2px solid #1a1a1a;
+}
+
+/* */
+
+.upgrade-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.upgrade-btn {
+position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    
+    background: #333;
+    border: 3px solid #555;
+    padding: 15px;
+    color: #fff;
+    transition: all 0.2s;
+    filter: none;
+    
+    min-height: 120px;
+    box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+}
+
+.upgrade-btn:hover {
+    background: #2b2b2b;
+    filter: brightness(1.1);
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.upgrade-btn:active {
+    border: 2px solid #444;
+    border-right-color: #fff;
+    border-bottom-color: #fff;
+}
+
+.upgrade-btn.disabled {
+    filter: grayscale(1) brightness(0.3);
+    opacity: 0.5;
+    cursor: url("../assets/CURSOR/disabled.cur"), not-allowed !important;
+    border-color: #333;
+}
+
+.upgrade-btn.disabled .up-cost {
+    color: #666;
+    border-color: #666;
+    cursor: url("../assets/CURSOR/disabled.cur"), not-allowed !important;
+}
+
+.upgrade-btn:not(.disabled):hover {
+    border-color: #00ff00;
+    box-shadow: 0 0 15px rgba(0,255,0,0.5);
+    transform: translateX(-2px);
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.up-icon {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    image-rendering: pixelated;
+    border: 2px solid #00ff00;
+    background: #000;
+    margin-right: 15px;
+    object-fit: cover;
+    image-rendering: pixelated;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.up-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 30px;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.up-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.up-desc {
+    font-size: 10px;
+    line-height: 1.4;
+    color: #ccc;
+    font-family: "PressStart", sans-serif;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.up-cost {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffd700;
+    background: #000;
     padding: 5px 10px;
-    margin-right: 5px;
-    cursor: pointer;
+    border: 2px solid #ffd700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: "PressStart", sans-serif;
+    cursor: url("../assets/CURSOR/hover.cur"), pointer !important;
+}
+
+.clicker-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.win-box {
+    background: #c0c0c0;
+    padding: 20px;
+    border: 3px solid black;
+    text-align: center;
+}
+
+.lcurrency {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    image-rendering: pixelated;
+    margin: 0 4px;
+}
+
+.floating-num {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    position: fixed;
+    color: #ffd700;
+    font-family: "PressStart", sans-serif;
+    font-size: 14px !important;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 999999;
+    text-shadow: 2px 2px 0px #000;
+    animation: floatUpAndOut 0.8s ease-out forwards;
+}
+
+@keyframes floatUpAndOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1.2);
+    }
+}
+
+/* ===== MEMORIES & TIMELINE ===== */
+#memories-window {
+    width: 1000px;
+    height: 800px;
+    background: #dfdfdf;
+}
+
+.memories-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    padding: 50px 0;
+    position: relative;
+}
+
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background-color: #000;
+    z-index: 1;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 4px solid #000;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    z-index: 3;
+}
+
+.timeline-item {
+    position: relative;
+    width: 50%;
+    margin-bottom: 60px;
+    z-index: 2;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: -10px;
+    background-color: white;
+    border: 4px solid #ff4d4d;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.timeline-item.left { left: 0; padding-right: 50px; }
+.timeline-item.right { left: 50%; padding-left: 50px; }
+
+.timeline-item.left::after { right: -12px; }
+.timeline-item.right::after { left: -12px; }
+
+/* --- OBSAH KARTY --- */
+.timeline-item .content {
+    display: flex;
+    background: #fff;
+    border: 2px solid #000;
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+    height: 250px;
+    overflow: hidden;
+}
+
+.timeline-photo {
+    width: 40%;
+    height: 100%;
+    border-right: 2px solid #000;
+}
+
+.timeline-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.timeline-info {
+    width: 60%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.timeline-info h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.timeline-info .date {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.timeline-info hr {
+    border: none;
+    border-top: 2px solid #000;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.timeline-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
 }

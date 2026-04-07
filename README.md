@@ -2,7 +2,7 @@
 
 Projekt pro naše vyročí :3
 
-**Poslední update:** 25. března 2026
+**Poslední update:** 7. dubna 2026
 
 ---
 
