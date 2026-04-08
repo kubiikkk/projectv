@@ -380,7 +380,7 @@ function switchSecretScreen(screenId) {
 // ===== 5) SETTINGS & SOUNDS =====
 function setWallpaper(name) {
     const wallpaperDiv = document.getElementById("wallpaper");
-    const imageUrl = `assets/WALLPAPERS/${name}.jpg`;
+    const imageUrl = `assets/WALLPAPERS/${name}`;
 
     const img = new Image();
     img.src = imageUrl;
