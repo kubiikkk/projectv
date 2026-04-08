@@ -575,12 +575,12 @@ button {
     text-shadow: 1px 1px 2px black;
 }
 
-.wp-preview[data-wallpaper="defaultwp.jpg"] { background-image: url('../assets/wallpapers/defaultwp.jpg'); }
-.wp-preview[data-wallpaper="purplewp.jpg"] { background-image: url('../assets/wallpapers/purplewp.jpg'); }
-.wp-preview[data-wallpaper="pinkwp.jpg"] { background-image: url('../assets/wallpapers/pinkwp.jpg'); }
-.wp-preview[data-wallpaper="luckywp.jpg"] { background-image: url('../assets/wallpapers/luckywp.jpg'); }
-.wp-preview[data-wallpaper="maxwp.jpg"] { background-image: url('../assets/wallpapers/maxwp.jpg'); }
-.wp-preview[data-wallpaper="kejswp.jpg"] { background-image: url('../assets/wallpapers/kejswp.jpg'); }
+.wp-preview[data-wallpaper="defaultwp.jpg"] { background-image: url('assets/wallpapers/defaultwp.jpg'); }
+.wp-preview[data-wallpaper="purplewp.jpg"] { background-image: url('assets/wallpapers/purplewp.jpg'); }
+.wp-preview[data-wallpaper="pinkwp.jpg"] { background-image: url('assets/wallpapers/pinkwp.jpg'); }
+.wp-preview[data-wallpaper="luckywp.jpg"] { background-image: url('assets/wallpapers/luckywp.jpg'); }
+.wp-preview[data-wallpaper="maxwp.jpg"] { background-image: url('assets/wallpapers/maxwp.jpg'); }
+.wp-preview[data-wallpaper="kejswp.jpg"] { background-image: url('assets/wallpapers/kejswp.jpg'); }
 
 .wp-preview.selected {
     border: 2px solid #000080;
