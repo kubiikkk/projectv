@@ -2,12 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>V&K | V1.0 ♡</title>
+    <link rel="icon" type="image/x-icon" href="./assets/heart.gif">
     <link rel = "stylesheet" href ="./css/style.css">
     <script src = "https://kit.fontawesome.com/b79a57267f.js" crossorigin = "anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+    <div id="mobile-blocker">
+        <div class="vhs-overlay"></div>
+        <div class="mobile-content">
+            <h1 class="vhs-text">ERROR: 404_UNSUPPORTED_DEVICE</h1>
+            <p class="vhs-subtext">THIS TERMINAL IS ONLY ACCESSIBLE VIA DESKTOP COMPUTER.</p>
+            <div class="vhs-glitch-line"></div>
+        </div>
+    </div>
+
     <div id = "menu-border" class = "menu-border menu-border-mobile"></div>
     <div id = "boot-screen"></div>
     <div class = "wscreen-main">
@@ -73,166 +84,398 @@
                 <img src="assets/snake.gif">
                 <span>Snake</span>
             </div>
+
+            <div id="trash-icon" class = "desktop-icon" onclick="openTrash()">
+                <img src="assets/trashbin.gif">
+                <span>Trash Bin</span>
+            </div>
+
+            <div id="trash-easteregg" class="hidden" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 10px; border: 3px solid #000; z-index: 9999; text-align: center;">
+                <img id="trash-photo" src="assets/LC/traumatizovanalucky.png" style="width: 100px; transition: transform 0.2s;">
+                <h3 style="color: black;">Are you sure?</h3>
+                <div>
+                    <button onclick="clickTrashYes()" style="padding: 5px 15px; background: red; color: white;">Yes</button>
+                    <button onclick="document.getElementById('trash-easteregg').classList.add('hidden')" style="padding: 5px 15px;">No</button>
+                </div>
+                <div id="trash-hint" class="hidden" style="margin-top: 15px; font-weight: bold; color: rgb(75,0,145);">7. HINT: R</div>
+            </div>
         </div>
 
         <div class="window hidden" id="memories-window">
             <div class="window-header">
                 <span>Memories</span>
-                <div>
-                    <span class="min-btn">_</span>
-                    <span class="close-btn">✕</span>
+                <div class="controls">
+                    <button class="min-btn">_</button>
+                    <button class="close-btn">X</button>
                 </div>
             </div>
-            <div class="window-content memories-scroll">
-                <div class="timeline">
+            <div class="window-content memories-scroll grid-background">
+                <div class="timeline-container">
+                    <div class = "intro">
+                        <h1 class = "titletext">OUR MEMORIES <img src = "assets/heart.gif" alt = "Heart" class = "heartgif"></h1>
+                        <span class = "desctest">Nejake nase vzpominecky a momenty co jsme spolu prozili za ten rok.</span>
+                    </div>
 
-                    <div class="timeline-item left">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                    <div class = "timeline-body">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/1.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>PRVNÍ SETKÁNÍ</h3>
-                                <span class = "date">10.5.2025</span>
+                            <div class="card-info-side">
+                                <h4>Nase prvni setkani</h4>
+                                <span class="timeline-date">10. 5. 2025</span>
                                 <hr>
-                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                                <p>Poprve co jsme se videli. Nikdy nezapomenu na tvoje zpocene ruce, na pavouka v sacku a na nasi nervozitu. 💗</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item right">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/27.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>TEST</h3>
-                                <span class = "date">10.3.2026</span>
+                            <div class="card-info-side">
+                                <h4>Nekrmte nutrie/politiky</h4>
+                                <span class="timeline-date">10. 5. 2025</span>
                                 <hr>
-                                <p>TEST</p>
+                                <p>Dalsi z artefaktu, co jsme potkali behem naseho prvniho "randicka".</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item left">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/26.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>PRVNÍ SETKÁNÍ</h3>
-                                <span class = "date">10.5.2025</span>
+                            <div class="card-info-side">
+                                <h4>Poprve u me + Max</h4>
+                                <span class="timeline-date">7. 6. 2025</span>
                                 <hr>
-                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                                <p>Jestli se nepletu tak poprve co jsme byli u me a poprve co jsi nazivo videla Maxe.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item right">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/4.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>TEST</h3>
-                                <span class = "date">10.3.2026</span>
+                            <div class="card-info-side">
+                                <h4>Nase prvni prochazecka</h4>
+                                <span class="timeline-date">14. 6. 2025</span>
                                 <hr>
-                                <p>TEST</p>
+                                <p>Prvni spolecna vecerni prochazecka. 😙</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item left">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/25.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>PRVNÍ SETKÁNÍ</h3>
-                                <span class = "date">10.5.2025</span>
+                            <div class="card-info-side">
+                                <h4>Pokracovani prochazecky</h4>
+                                <span class="timeline-date">15. 6. 2025</span>
                                 <hr>
-                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                                <p>Poprve co jsme pred sebou prdeli. (ZLOMOVY MOMENT!) 🥀</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item right">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/22.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>TEST</h3>
-                                <span class = "date">10.3.2026</span>
+                            <div class="card-info-side">
+                                <h4>Squirt Game in Prag</h4>
+                                <span class="timeline-date">1. 7. 2025</span>
                                 <hr>
-                                <p>TEST</p>
+                                <p>Vyletik po Praze se zaminkou najit Squirt Game. 💗</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item left">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/7.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>PRVNÍ SETKÁNÍ</h3>
-                                <span class = "date">10.5.2025</span>
+                            <div class="card-info-side">
+                                <h4>Nekolikaty vyletik k Mosteckemu Jezirku</h4>
+                                <span class="timeline-date">7. 7. 2025</span>
                                 <hr>
-                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                                <p>Nemluve o vyletu na Matyldu, tak jsme parkrat byli i na tomto krasnem a drahem mistecku. 💔</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item right">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/21.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>TEST</h3>
-                                <span class = "date">10.3.2026</span>
+                            <div class="card-info-side">
+                                <h4>Rodinny obraz</h4>
+                                <span class="timeline-date">22. 7. 2025</span>
                                 <hr>
-                                <p>TEST</p>
+                                <p>Tohle je podle me seriozne artefakt, ktery me prijal k Vam do rodiny. (navzdy vdecny) 😭</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item left">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/1.jpg" alt = "Vzpomínka 1">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/41.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>PRVNÍ SETKÁNÍ</h3>
-                                <span class = "date">10.5.2025</span>
+                            <div class="card-info-side">
+                                <h4>Prvni spolecna pout</h4>
+                                <span class="timeline-date">16. 8. 2025</span>
                                 <hr>
-                                <p>Poprvé co jsme se viděli. Nikdy nezapomenu na tvoje zpocené ruce, na pavouka v sáčku a na naši nervozitu.. 💗</p>
+                                <p>Prvni spolecna pout. (na nic jsem nesel, protoze jsem byl posranej 💔)</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="timeline-item right">
-                        <div class="content">
-                            <div class = "timeline-photo">
-                                <img src="assets/TIMELINE/2.jpg" alt = "Vzpomínka 2">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/20.jpg" class="timeline-img">
                             </div>
-                            <div class = "timeline-info">
-                                <h3>TEST</h3>
-                                <span class = "date">10.3.2026</span>
+                            <div class="card-info-side">
+                                <h4>Vareni/peceni</h4>
+                                <span class="timeline-date">6. 9. 2025</span>
                                 <hr>
-                                <p>TEST</p>
+                                <p>Pizzicka, ktera byla vyborna (reknes mid a nemilujes me).</p>
                             </div>
                         </div>
                     </div>
 
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/18.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>V Hospode s Hacou a Tatou</h4>
+                                <span class="timeline-date">13. 9. 2025</span>
+                                <hr>
+                                <p>Moje oblibena fotecka, kde jsi ty a Haca.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/19.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Opekani</h4>
+                                <span class="timeline-date">13. 9. 2025</span>
+                                <hr>
+                                <p>Opekani u tveho tatinka.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/16.png" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Predelavani pokoju</h4>
+                                <span class="timeline-date">18. 9. 2025</span>
+                                <hr>
+                                <p>Taky jsme oba stihli ziskat "nove" pokoje. Tady jenom takova vzpominecka. 😭</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/15.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Nase spolecna narozeninova oslava</h4>
+                                <span class="timeline-date">19. 10. 2025</span>
+                                <hr>
+                                <p>Peak oslava. Na nemeckou hymnu nikdy nezapomenem. 🙏</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/13.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Tvoje narozeninky</h4>
+                                <span class="timeline-date">24. 10. 2025</span>
+                                <hr>
+                                <p>Krome Panoptiko listku, merche, webovky a dalsich blbosti jsi dostala sneky. (jsi prvni a posledni pro kterou kdy pecu) 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/12.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Nekolikaty chlebik</h4>
+                                <span class="timeline-date">25. 12. 2025</span>
+                                <hr>
+                                <p>Uz po nekolikate co jsme spolu pekli nebo varili. Love it. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/37.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Prvni spolecne Vanoce 🎄</h4>
+                                <span class="timeline-date">24. 12. 2025</span>
+                                <hr>
+                                <p>Uprimne moje nejoblibenejsi Vanoce vubec. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/2.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Prvni dymka</h4>
+                                <span class="timeline-date">30. 12. 2025</span>
+                                <hr>
+                                <p>Haha poprve jsme zkusili dymku. (Sel bych znova)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/11.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Prvni spolecny koncert PANOPTIKO 🎸</h4>
+                                <span class="timeline-date">24. 1. 2025</span>
+                                <hr>
+                                <p>PEAK KONCERT, CHCI ZNOVA (moje oblibena fotecka) 💔</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/9.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Stehovani Mayi</h4>
+                                <span class="timeline-date">30. 1. 2026</span>
+                                <hr>
+                                <p>Pri stehovani Mayi se stalo velice hodne dulezitych momentu, pri cemz tato fotka je jednim z nich. 💗</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/5.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Valentyn 🌹</h4>
+                                <span class="timeline-date">12. 2. 2025</span>
+                                <hr>
+                                <p>Nas prvni valentyn.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/33.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Utrpeni</h4>
+                                <span class="timeline-date">3. 3. 2026</span>
+                                <hr>
+                                <p>Prvni a posledni traumatizujici operace. To bylo lidi. 😭</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="card-photo-side">
+                                <img src="assets/TIMELINE/6.jpg" class="timeline-img">
+                            </div>
+                            <div class="card-info-side">
+                                <h4>Photoshoot na prochazce 💗</h4>
+                                <span class="timeline-date">14. 3. 2026</span>
+                                <hr>
+                                <p>Krasna prochazecka, kde se staly vskutku zajimave udalosti. (ti co vi)</p>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class = "outro">
+                        <span class = "endtext">A spoustu dalsich vzpominek a momentu...</span>
+                        <span class = "memorieshint">1. HINT: V</span>
+                    </div>
+
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="luckyclicker-window" class="window hidden">
             <div class="window-header">
-                <span>Lucky Clicker</span>
+                <span>Lucky Clicker V1.0</span>
                 <div class="controls">
                     <button class="min-btn">_</button>
                     <button class="close-btn">X</button>
@@ -321,8 +564,10 @@
                 <div id="clicker-win-screen" class="clicker-overlay hidden">
                     <div class="win-box">
                         <h2>GOAL REACHED! 🎉</h2>
-                        <p>Your Hint: <b>"IS"</b> ❤️</p>
-                        <button class="retro-btn" onclick="activateFreeMode()">ENABLE FREE MODE</button>
+                        <p>2. HINT: <b>"K"</b> ❤️</p>
+                        <div class = "audiobtns">
+                            <button class="retro-btn" onclick="activateFreeMode()">ENABLE FREE MODE</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -330,74 +575,189 @@
 
         <div class="window hidden" id="guessthesong-window"> 
             <div class="window-header">
-                <span>Guess The Song</span>
-                <div><span class="min-btn">_</span><span class="close-btn">✕</span></div>
+                <span>Guess The Song V1.0</span>
+                <div class="controls">
+                    <button class="min-btn">_</button>
+                    <button class="close-btn" onclick="closeSongWindow()">X</button>
+                </div>
             </div>
-            <div class="window-content" id="song-game-content">
-                <div id="song-start-screen">
-                    <button onclick="startSongGame()">START GAME</button>
+            <div class="window-content song-game-container">
+                <div id="song-start-screen" class="song-screen">
+                    <h1 class="retro-title">GUESS THE SONG</h1>
+                    <div class="vertical-menu">
+                        <button onclick="startSongGame()" class="btn-xp">Start Game</button>
+                        <button onclick="closeSongWindow()" class="btn-xp">Quit</button>
+                    </div>
                 </div>
-                <div id="song-play-screen" class="hidden">
-                    <p>Song <span id="song-index">1</span>/5</p>
-                    <audio id="game-audio" src=""></audio>
-                    <button onclick="document.getElementById('game-audio').play()">▶ Play Snippet</button>
-                    <input type="text" id="song-input" placeholder="Song title...">
-                    <button onclick="submitSong()">Submit</button>
+
+                <div id="song-play-screen" class="song-screen hidden">
+                    <div class="song-info-header">SONG <span id="current-song-num">1</span> / 10</div>
+        
+                    <div class="audio-controls">
+                        <button id="play-btn" onclick="toggleAudio()" class="play-circle"><i class="fa-solid fa-play"></i></button>
+                        <div class="progress-wrapper">
+                            <div class="time-display"><span id="time-current">0:00</span> / <span id="time-total">0:00</span></div>
+                            <div class="song-progress-container">
+                                <div id="song-progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="answer-box-vertical">
+                        <input type="text" id="song-input" placeholder="Write the name of the song..." autocomplete="off">
+                        <button onclick="checkSongAnswer()" class="btn-wide-xp confirm-wide">Confirm</button>
+                    </div>
                 </div>
-                <div id="song-result" class="hidden"></div>
+
+                <div id="song-reveal-screen" class="song-screen hidden">
+                    <h2 id="reveal-status-text">CORRECT!</h2>
+                    <div class="reveal-card-xp">
+                        <img id="reveal-cover" src="assets/GUESSTHESONG/COVERS/default.jpg">
+                        <div class="reveal-content-center">
+                            <h3 id="reveal-title">Name Of The Song</h3>
+                            <p id="reveal-artist">Artist</p>
+                            <p id="reveal-date">2024</p>
+                        </div>
+                    </div>
+                    <button id="next-song-btn" onclick="nextSong()" class="btn-xp">Next</button>
+                </div>
+
+                <div id="song-end-screen" class="song-screen hidden">
+                    <h2 class = "retro-title">RESULTS</h2>
+                    <div class="result-bar-container">
+                        <div id="result-bar-fill"></div>
+                        <span id="result-percent-text">0%</span>
+                    </div>
+                    <p id="result-message"></p>
+                    <div class="vertical-menu">
+                        <button id="retry-btn" onclick="restartSongGame()" class="btn-xp hidden">Try again</button>
+                        <button onclick="closeSongWindow()" class="btn-xp">Quit</button>
+                    </div>
+                </div>
+            </div>
+
+            <audio id="game-audio"></audio>
             </div>
         </div>
 
         <div class="window hidden" id="settings-window">
             <div class="window-header">
                 <span>Settings</span>
-                <div>
-                    <span class="min-btn">_</span>
-                    <span class="close-btn">✕</span>
+                <div class="controls">
+                    <button class="min-btn">_</button>
+                    <button class="close-btn">X</button>
                 </div>
             </div>
-            <div class="window-content">
-                <div class="wallpaper-grid">
-                    <div class="wp-preview" data-wallpaper="defaultwp.jpg" onclick="setWallpaper('defaultwp.jpg')">
-                        <img src="assets/WALLPAPERS/defaultwp.jpg">
-                        <span>Default</span>
-                    </div>
-                    <div class="wp-preview" data-wallpaper="purplewp.jpg" onclick="setWallpaper('purplewp.jpg')">
-                        <img src="assets/WALLPAPERS/purplewp.jpg">
-                        <span>Purple Night</span>
-                    </div>
-                    </div>
-                <hr>
-                <button id="sound-toggle-btn" class="task-item" onclick="toggleAllSounds()" style="width:100%">
-                    Sounds: ON
-                </button>
+            <div class="settings-content">
+                <h3>Wallpapers</h3>
+                <div class="wp-grid">
+                    <div class="wp-preview hint-banner" data-id="0" data-wallpaper="defaultwp.jpg" onclick="setWallpaper('defaultwp.jpg')">Default</div>
+                    <div class="wp-preview hint-banner" data-id="1" data-wallpaper="purplewp.jpg" onclick="setWallpaper('purplewp.jpg')">Purple</div>
+                    <div class="wp-preview hint-banner" data-id="2" data-wallpaper="pinkwp.jpg" onclick="setWallpaper('pinkwp.jpg')">Pink</div>
+                    <div class="wp-preview hint-banner" data-id="3" data-wallpaper="luckywp.jpg" onclick="setWallpaper('luckywp.jpg')">Lucky</div>
+                    <div class="wp-preview hint-banner" data-id="4" data-wallpaper="maxwp.jpg" onclick="setWallpaper('maxwp.jpg')">Max</div>
+                    <div class="wp-preview hint-banner" data-id="5" data-wallpaper="kejswp.jpg" onclick="setWallpaper('kejswp.jpg')">Kejs</div>
+                </div>
+
+                <div id="secret-hint-display" class="hidden-hint">
+                    4. HINT: E
+                </div>
+
+                <h3>Audio</h3>
+                <div class="audiobtns">
+                    <button id="sound-toggle-btn" onclick="toggleAllSounds()" class = "audiobtn1">Sounds: ON</button>
+                    <button id="fart-toggle-btn" onclick="toggleFartMode()" class = "audiobtn2">Fart Mode: OFF</button>
+                </div>
+
+                <hr style="border: 1px solid #555; margin: 15px 0;">
+    
+                <div class="credits-section" style="font-size: 8px; color: #888; text-align: center;">
+                    <p>Coded & Designed by: kubi</p>
+                    <p>All rights reserved</p>
+                    <p id="system-stats">Lines of Code: 2963</p>
+                </div>
             </div>
         </div>
 
         <div class="window hidden" id="secret-window">
             <div class="window-header">
                 <span>Secret</span>
-                <div>
-                    <span class="min-btn">_</span>
-                    <span class="close-btn">✕</span>
+                <div class="controls">
+                    <button class="min-btn">_</button>
+                    <button class="close-btn" onclick="closeSecretWindow()">X</button>
                 </div>
             </div>
-            <div id="error-box" class="error-box hidden">
-                <div class="error-content">
-                    <p>INCORRECT PASSWORD ❗</p>
-                    <button onclick="closeError()" class = "closepass">Close</button>
+        
+            <div class="window-content secret-game-container">
+                <div id="secret-login-screen" class="secret-screen">
+                    <div class="mystery-box">
+                        <i class="fa-solid fa-user-secret mystery-icon"></i>
+                        <h2 class="mystery-title">ENTER PASSWORD</h2>
+                        <div class="password-wrapper">
+                            <input type="password" id="secret-input" placeholder="******" autocomplete="off">
+                            <i class="fa-solid fa-eye large-eye" id="toggle-password" onclick="toggleSecretVisibility()"></i>
+                        </div>
+                        <button onclick="checkSecret()" class="btn-wide-xp">Unlock</button>
+                    </div>
                 </div>
-            </div>
-            <div class="window-content">
-                <input id="secret-input" placeholder="Enter password">
-                <button onclick="checkSecret()">Unlock</button>
 
-                <div id="secret-content" style="display:none;">
-                    <div class="long-message">
-                        <p>Tady bude tvoje opravdu dlouhá zpráva... [Text se scrollováním]</p>
-                        <div class="secret-actions">
-                            <a href="assets/secret.mp4" download class="btn-retro">SECRET VIDEO</a>
-                            <a href="assets/bonus.jpg" download class="btn-retro">BONUS PHOTO</a>
+                <div id="secret-error-screen" class="secret-screen hidden">
+                    <div class="error-zone">
+                        <i class="fa-solid fa-triangle-exclamation fa-3x" style="color: red; margin-bottom: 15px;"></i>
+                        <p style="color: red; font-weight: bold; font-size: 14px;">ACCESS DENIED</p>
+                        <p style="font-size: 10px; margin-bottom: 20px;">Incorrect passcode.</p>
+                        <button onclick="retrySecret()" class="btn-xp">Try Again</button>
+                    </div>
+                </div>
+
+                <div id="secret-hint-screen" class="secret-screen hidden">
+                    <div class="error-zone mystery-box" style="border-color: gold !important;">
+                        <i class="fa-solid fa-eye fa-3x" style="color: gold; margin-bottom: 15px; text-shadow: 0 0 10px gold;"></i>
+        
+                        <h2 style="color: gold; font-family: 'PressStart', sans-serif; font-size: 16px; margin-bottom: 15px;">
+                            SECRET FOUND!
+                        </h2>
+        
+                        <p style="color: #eee; font-family: 'PressStart', sans-serif; font-size: 12px; line-height: 1.6; margin-bottom: 20px;">
+                            5. HINT: V
+                        </p>
+        
+                        <button onclick="closeSecretHint()" class="btn-xp">Understood</button>
+                    </div>
+                </div>
+                
+
+                <div id="secret-content-screen" class="secret-screen hidden">
+                    <div class="secret-scroll-view">
+                        <div class="long-message-content">
+                            <h3>AHOJ, LASKOO!</h3>
+                            <p>Konecne ses tu probojovala, huh? :3</p>
+                            <p>Snad se ti cely koncept a provedeni libilo. 💗</p>
+                            <p>Kazdopadne abych zacal...</p>
+                            <p>Nase prvni vyroci. Prvni rok, lidi. Jsem tak neskutecne stastny, za to ze te mam, Veru. Tenhle rok byl muj nejlepsi rok co jsem kdy zazil a to myslim vazne. Proc? Jenom diky tobe.</p>
+                            <p>Vsechny zazitky, vzpominky, spatne i dobre chvilky, milostne, intimni chvilky, Vanoce, narozeniny, volani, hrani ruznych her, sledovani filmu, serialu, vareni, peceni a dalsich milion veci. Oh boze, jak neskutecne moc to s tebou miluji.</p>
+                            <p>Tak strasne moc te miluju, Veru. Tak strasne moc. Jsi pro me ta nejkrasnejsi a nejlepsi zenuska co muzu mit. Neexistuje nikdo lepsi nez ty a ani nikdy nebude.</p>
+                            <p>Chci ti tady pripomenout, jak moc uzasna jsi a jak moc pro me znamenas.</p>
+                            <p>Ani nevis jak moc stastny jsem ze jsme spolu. Ze jsme partneri a za par let manzele. (prosim)</p>
+                            <p>Jsem tak moc stastny, ze kdyz mas spatne chvile tak te muzu podrzet. Muzu byt s tebou, hladit te, objimat te, mluvit s tebou.</p>
+                            <p>Jsem tak moc stastny, ze veskerou lasku co mi davas a starosti. Jsem taky strasne moc stastny, ze me tvoje rodina prijma a i kdyz je mi to blby rict tak ze jsem soucasti rodiny (aspon z casti).</p>
+                            <p>Veru. Jsi ta nejuzasnejsi zena, co jsem kdy poznal. Nikdy te nechci ztratit. Chci at jsme spolu navzdy. Ve spatnych momentech i v tech dobrych. Chci at spolu drzime v jakekoli situaci. Chci at se milujeme navzdy, at se o sebe starame navzdy a at tohle vsechno trva navzdy.</p>
+                            <p>Dekuju ti mockrat za tento nadherny rok plny radosti, lasky a pocitu ze vsechno je v poradku. Ten pocit lasky a bezpeci co mi davas je nepopsatelny a moc doufam, ze citis neco podobneho i z me strany. Zalezi mi na tobe nejvic v celem vesmiru na nicem jinem nez na tobe mi vic nezalezi.</p>
+                            <p>Nas vztah, tvoje laska a cely ty je pro me to nejcennejsi, co mam v zivote. Pamatuj si to, prosim.</p>
+                            <br>
+                            <p>Tak na nas, lasko, a na nas prvni rok spolu. At to nejlepe pokracuje az do smrti.</p>
+                            <p>Miluju te celym svym srdickem, Verunko.</p>
+                            <p class = "podpis">Lovingly yours,
+                                kubi </p>
+                        </div>
+                    
+                        <div class="secret-actions-xp">
+                            <a href="assets/POUKAZKA [V&K].pdf" target="_blank" class="btn-xp action-btn">REWARD #1</a>
+                            <a onclick="openGallery()" class="btn-xp action-btn">REWARD #¨2</a>
+                        </div>
+                    
+                        <div class="secret-footer-kubi">
+                            Made by kubi with 💗 | I LOVE YOU
                         </div>
                     </div>
                 </div>
@@ -406,14 +766,96 @@
 
         <div class="window hidden" id="snake-window">
             <div class="window-header">
-                <span>Snake</span>
-                <div>
-                    <span class="min-btn">_</span>
-                    <span class="close-btn">✕</span>
+                <span>Snake V1.0</span>
+                <div class="controls">
+                    <button class="min-btn">_</button>
+                    <button class="close-btn" onclick="closeSnakeWindow()">X</button>
                 </div>
             </div>
-            <div class="window-content">
-                <canvas id="gameCanvas" width="300" height="300"></canvas>
+            <div class="window-content snake-game-container grid-background">
+            
+                <div id="snake-menu-screen" class="snake-screen">
+                    <div class="snake-title-zone">
+                        <img src="assets/snake.gif" alt="Snake" class="snake-logo-image">
+                        <h1 class="retro-title-snake">SNAKE V1.0</h1>
+                    </div>
+                    <div class="vertical-menu">
+                        <button onclick="startSnakeGame()" class="btn-xp">Start Game</button>
+                        <button onclick="switchSnakeScreen('snake-settings-screen')" class="btn-xp">Settings</button>
+                        <button onclick="closeSnakeWindow()" class="btn-xp">Quit</button>
+                    </div>
+                </div>
+
+                <div id="snake-settings-screen" class="snake-screen hidden">
+                    <div class="snake-settings-box">
+                        <h2 class="retro-title-snake" style="margin-bottom: 20px;">SNAKE CONFIG</h2>
+        
+                        <div class="settings-group">
+                            <p>SNAKE SKIN</p>
+                            <div class="color-picker-row" style="display: flex; gap: 15px; justify-content: center;">
+                                <button onclick="setSnakeColor('lime', this)" class="btn-xp choice-btn selected">
+                                    LIME <div class="color-preview" style="background: lime;"></div>
+                                </button>
+                                <button onclick="setSnakeColor('cyan', this)" class="btn-xp choice-btn">
+                                    CYAN <div class="color-preview" style="background: cyan;"></div>
+                                </button>
+                                <button onclick="setSnakeColor('#ff00ff', this)" class="btn-xp choice-btn">
+                                    PINK <div class="color-preview" style="background: #ff00ff;"></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <p>FOOD TYPE</p>
+                            <div class="color-picker-row" style="display: flex; gap: 15px; justify-content: center;">
+                                <button onclick="setSnakeFoodItem('apple', this)" class="btn-xp choice-btn selected">
+                                    APPLE <div class="color-preview" style="background: red;"></div>
+                                </button>
+                                <button onclick="setSnakeFoodItem('mouse', this)" class="btn-xp choice-btn">
+                                    MOUSE <div class="color-preview" style="background: #888;"></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button onclick="switchSnakeScreen('snake-menu-screen')" class="btn-xp" style="margin-top: 20px; width: 220px !important; font-weight: bold;">
+                            Save & Close
+                        </button>
+                    </div>
+                </div>
+
+                <div id="snake-play-screen" class="snake-screen hidden">
+                    <div class="snake-header-stats">
+                        <div class="stat-box-xp">Score: <span id="snake-score">0</span></div>
+                        <div class="stat-box-xp">High: <span id="snake-highscore">0</span></div>
+                    </div>
+
+                    <div class="canvas-wrapper-xp">
+                        <canvas id="gameCanvas" width="500" height="500"></canvas>
+                    </div>
+                </div>
+
+                <div id="snake-hint-screen" class="snake-screen hidden">
+                    <div class="win-box-xp mystery-box">
+                        <h2 style="color: lime;">HINT UNLOCKED!</h2>
+                        <p style="color: gold; font-size: 14px; margin: 15px 0;">6. HINT: E</p>
+                        <div class="menu-buttons-snake">
+                            <button onclick="activateSnakeFreeMode()" class="btn-xp wide-btn-snake">Free Mode</button>
+                            <button onclick="closeSnakeWindow()" class="btn-xp wide-btn-snake">Quit</button>
+                        </div>
+                    </div>
+                </div>
+            
+                <div id="snake-gameover-screen" class="snake-screen hidden">
+                    <div class="error-zone">
+                        <h2 style="color: red;">GAME OVER!</h2>
+                        <p>You died.</p>
+                        <p style="font-size: 14px;">Score: <span id="snake-final-score">0</span></p>
+                        <div class="vertical-menu" style="margin-top: 20px;">
+                            <button onclick="restartSnakeGame()" class="btn-xp">Try Again</button>
+                            <button onclick="closeSnakeWindow()" class="btn-xp">Quit</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -422,6 +864,39 @@
         </div>
     </div>
 
+    <div class="window hidden" id="gallery-window" style="display: none;">
+        <div class="window-header">
+            <span>Gallery</span>
+            <div class="controls">
+                <button class="min-btn">_</button>
+                <button class="close-btn" onclick="closeGalleryWindow()">X</button>
+            </div>
+        </div>
+        <div class="window-content gallery-grid">
+            <img src="assets/TIMELINE/38.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/39.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/40.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/30.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/31.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/34.png" class="gallery-item">
+            <img src="assets/TIMELINE/29.png" class="gallery-item">
+            <img src="assets/TIMELINE/9.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/42.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/43.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/44.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/45.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/46.png" class="gallery-item">
+            <img src="assets/TIMELINE/47.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/48.png" class="gallery-item">
+            <img src="assets/TIMELINE/49.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/50.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/51.jpg" class="gallery-item">
+            <img src="assets/TIMELINE/52.png" class="gallery-item">
+            <img src="assets/TIMELINE/53.png" class="gallery-item">
+        </div>
+    </div>
+
     <script src = "./js/script.js" defer></script>
+    <script src = "./js/stats.js"></script>
 </body>
 </html>

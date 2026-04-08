@@ -2,9 +2,12 @@
 let soundsEnabled = true;
 let clickerData = { clicks: 0, perClick: 1, autoClick: 0, finished: false };
 let snakeGame = { active: false, score: 0, highscore: 0 };
-let currentSong = 0;
-let songScore = 0;
 let highestZ = 1000;
+let secretUnlocked = false;
+
+let fartMode = false;
+
+let trashClicks = 0;
 
 let clickerState = {
     clicks: 0,
@@ -28,6 +31,10 @@ let clickerState = {
     }
 };
 
+let currentSongIdx = 0;
+let songScore = 0;
+const gameAudio = document.getElementById("game-audio");
+
 document.addEventListener("DOMContentLoaded", () => {
     updateClickerUI(); 
 });
@@ -36,6 +43,49 @@ window.addEventListener("load", () => {
     let saved = localStorage.getItem("wallpaper") || "defaultwp.jpg";
     setWallpaper(saved);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const taskbar = document.getElementById("taskbar");
+    if(taskbar) taskbar.style.display = "none";
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        const activeEl = document.activeElement;
+
+        if (activeEl.id === "song-input") {
+            checkSongAnswer();
+        } 
+        
+        else if (activeEl.id === "secret-input") {
+            checkSecret();
+        }
+        
+    }
+});
+
+let snakeState = {
+    active: false,
+    score: 0,
+    highscore: 0,
+    isFreeMode: false,
+    goal: 15,
+    speed: 100,
+    items: {
+        snakeColor: 'lime',
+        foodColor: 'red',
+        bgColor: '#000'
+    }
+};
+
+let ctx;
+let snake = [];
+let food = { x: 0, y: 0 };
+let dx = 0;
+let dy = 0;
+let gridSize = 20;
+let tileCount = 25;
+let snakeInterval;
 
 // ===== SOUNDS =====
 const sounds = {
@@ -48,14 +98,24 @@ const sounds = {
     win: new Audio("assets/SOUNDS/win.mp3")
 };
 
+const fartSound = new Audio("assets/SOUNDS/fart.mp3");
+
 const clickSFX = new Audio("assets/SOUNDS/clicklucky.mp3");
 clickSFX.volume = 1.0;
 clickSFX.preload = "auto";
 clickSFX.load();
 
 function playSound(name, customVolume = 1.0) {
-    if (!soundsEnabled || !sounds[name]) return;
+    if (!soundsEnabled) return;
 
+    if (fartMode) {
+        fartSound.volume = customVolume;
+        fartSound.currentTime = 0;
+        fartSound.play();
+        return;
+    }
+
+    if (!sounds[name]) return;
     const sfx = sounds[name];
     sfx.volume = customVolume;
     sfx.currentTime = 0;
@@ -66,12 +126,16 @@ function playSound(name, customVolume = 1.0) {
 window.addEventListener("load", () => {
     const boot = document.getElementById("boot-screen");
     const screen = document.querySelector(".wscreen");
+
     if(!boot) return;
 
     boot.style.animation = "flash 0.3s ease";
     setTimeout(() => { boot.style.animation = "crt-on 1s ease forwards"; }, 300);
     setTimeout(() => { screen.style.opacity = "1"; }, 800);
-    setTimeout(() => { boot.remove(); }, 1300);
+
+    setTimeout(() => {
+        boot.remove();
+    }, 1300);
 });
 
 // ===== START BUTTON & LOADING =====
@@ -104,6 +168,8 @@ if (startButton) {
                 setTimeout(() => {
                     document.querySelector(".wscreen-main").style.display = "none";
                     mainMenu.style.display = "block";
+    
+                    document.getElementById("taskbar").style.display = "flex"; 
                 }, 400);
             }
         }, 30);
@@ -113,6 +179,9 @@ if (startButton) {
 // ===== WINDOW SYSTEM =====
 function focusWindow(win) {
     highestZ++;
+    if (highestZ > 999900) {
+        highestZ = 1000;
+    }
     win.style.zIndex = highestZ;
 }
 
@@ -152,7 +221,7 @@ document.addEventListener("mousedown", (e) => {
 });
 
 // 1) TASKBAR FIX (Left align + Capitalize)
-function addToTaskbar(name, win) {
+function addToTaskbar(name, win, customIcon = null) {
     let existing = document.querySelector(`[data-task="${name}"]`);
     if (existing) return;
 
@@ -160,17 +229,18 @@ function addToTaskbar(name, win) {
     item.className = "task-item";
     item.dataset.task = name;
 
-    // První písmeno velké
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 
+    const iconSrc = customIcon ? customIcon : `assets/${name}.gif`;
+
     item.innerHTML = `
-        <img src="assets/${name}.gif" style="width:16px" onerror="this.src='assets/default.gif'">
+        <img src="${iconSrc}" style="width:16px" onerror="this.src='assets/default.gif'">
         <span>${capitalizedName}</span>
     `;
 
     item.onclick = () => {
         win.style.display = (win.style.display === "none") ? "flex" : "none";
-        if(win.style.display === "flex") win.style.zIndex = Date.now();
+        if(win.style.display === "flex") focusWindow(win);
     };
 
     taskbar.appendChild(item);
@@ -180,12 +250,24 @@ function addToTaskbar(name, win) {
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("close-btn")) {
         const win = e.target.closest(".window");
+        if (!win) return;
+
         const id = win.id.replace("-window", "");
-        win.style.display = "none";
-        win.classList.add("hidden");
-        const task = document.querySelector(`[data-task="${id}"]`);
-        if (task) task.remove();
-        if (id === "game") snakeGame.active = false; // Stop snake
+
+        if (id === "guessthesong") {
+            closeSongWindow();
+        }
+        if (id === "gallery") {
+            closeGalleryWindow();
+        } 
+        else {
+            win.style.display = "none";
+            win.classList.add("hidden");
+            const task = document.querySelector(`.task-item[data-task="${id}"]`);
+            if (task) task.remove();
+            
+            if (id === "game") snakeState.active = false;
+        }
     }
     if (e.target.classList.contains("min-btn")) {
         e.target.closest(".window").style.display = "none";
@@ -193,39 +275,134 @@ document.addEventListener("click", (e) => {
 });
 
 // ===== 2) SECRET & ERROR BOX =====
-function checkSecret() {
-    const val = document.getElementById("secret-input").value.trim().toUpperCase();
-    if (val === "") return;
+let secretEyeClickCount = 0;
 
-    // Tady si nastav svoje heslo
-    if (val === "C7LOVE") {
-        playSound("success");
-        document.getElementById("secret-content").style.display = "block";
-        document.getElementById("secret-input").parentElement.style.display = "none";
+function checkSecret() {
+    const input = document.getElementById("secret-input");
+    const val = input.value.trim().toUpperCase();
+    
+    // PASSWORD
+    const CORRECT_PASSWORD = "VK4EVER"; 
+
+    if (val === CORRECT_PASSWORD) {
+        unlockSecret();
     } else {
-        playSound("error");
-        document.getElementById("error-box").classList.remove("hidden");
+        if(typeof playSound === "function") playSound("error");
+        switchSecretScreen("secret-error-screen");
+        input.value = "";
     }
 }
 
-function closeError() {
-    const errorBox = document.getElementById("error-box");
-    if(errorBox) errorBox.classList.add("hidden");
+function toggleSecretVisibility() {
+    const input = document.getElementById("secret-input");
+    const eye = document.getElementById("toggle-password");
+    
+    secretEyeClickCount++;
+    if (secretEyeClickCount === 10) {
+        if(typeof playSound === "function") playSound("success");
+        switchSecretScreen("secret-hint-screen");
+        secretEyeClickCount = 0;
+    }
+
+    if (input.type === "password") {
+        input.type = "text";
+        eye.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+        input.type = "password";
+        eye.classList.replace("fa-eye-slash", "fa-eye");
+    }
+}
+
+function closeSecretHint() {
+    switchSecretScreen("secret-login-screen");
+    document.getElementById("secret-input").focus();
+}
+
+function unlockSecret() {
+    if(typeof playSound === "function") playSound("win");
+    switchSecretScreen("secret-content-screen");
+
+    try {
+        if (typeof confetti === "function") {
+            confetti({
+                particleCount: 200,
+                spread: 100,
+                origin: { y: 0.6 },
+                zIndex: 9999999,
+                colors: ['#9400D3', '#ffffff', '#FF69B4']
+            });
+        }
+    } catch (e) { console.error(e); }
+}
+
+function retrySecret() {
+    switchSecretScreen("secret-login-screen");
+    document.getElementById("secret-input").focus();
+}
+
+function closeSecretWindow() {
+    secretUnlocked = false;
+    secretEyeClickCount = 0;
+    document.getElementById("secret-input").value = "";
+    document.getElementById("secret-input").type = "password";
+    
+    const eyeIcon = document.getElementById("toggle-password");
+    if(eyeIcon) eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+
+    const win = document.getElementById("secret-window");
+    if (win) {
+        win.style.display = "none";
+        win.classList.add("hidden");
+    }
+
+    const taskItem = document.querySelector('.task-item[data-task="secret"]');
+    if (taskItem) {
+        taskItem.remove();
+    }
+    
+    secretUnlocked = false;
+    document.getElementById("secret-input").value = "";
+    switchSecretScreen("secret-login-screen");
+}
+
+function switchSecretScreen(screenId) {
+    const screens = document.querySelectorAll("#secret-window .secret-screen");
+    screens.forEach(s => s.classList.add("hidden"));
+    
+    const target = document.getElementById(screenId);
+    if (target) {
+        target.classList.remove("hidden");
+    } else {
+        console.error("Obrazovka s ID " + screenId + " neexistuje!");
+    }
 }
 
 // ===== 5) SETTINGS & SOUNDS =====
 function setWallpaper(name) {
-    document.getElementById("wallpaper").style.backgroundImage =
-        `url(assets/WALLPAPERS/${name})`;
+    const wallpaperDiv = document.getElementById("wallpaper");
+    const imageUrl = `assets/WALLPAPERS/${name}`;
 
-    localStorage.setItem("wallpaper", name);
+    const img = new Image();
+    img.src = imageUrl;
 
-    document.querySelectorAll(".wp-preview").forEach(el => {
-        el.classList.remove("selected");
-    });
+    img.onload = function() {
+        wallpaperDiv.style.backgroundImage = `url(${imageUrl})`;
+        
+        localStorage.setItem("wallpaper", name);
 
-    document.querySelector(`[data-wallpaper="${name}"]`)
-        .classList.add("selected");
+        document.querySelectorAll(".wp-preview").forEach(el => {
+            el.classList.remove("selected");
+        });
+
+        const selectedPreview = document.querySelector(`[data-wallpaper="${name}"]`);
+        if (selectedPreview) {
+            selectedPreview.classList.add("selected");
+        }
+    };
+
+    img.onerror = function() {
+        console.error("Nepodařilo se načíst tapetu: " + imageUrl);
+    };
 }
 
 function toggleAllSounds() {
@@ -235,54 +412,222 @@ function toggleAllSounds() {
 }
 
 // ===== 6) SNAKE GAME =====
-let canvas = document.getElementById("gameCanvas");
-let ctx = canvas ? canvas.getContext("2d") : null;
-let snake = [{ x: 10, y: 10 }];
-let food = { x: 5, y: 5 };
-let dx = 1, dy = 0;
+function initCanvas() {
+    const canvas = document.getElementById("gameCanvas");
+    if (canvas && !ctx) {
+        ctx = canvas.getContext("2d");
+    }
+}
+
+document.addEventListener("keydown", (e) => {
+    if (!snakeState.active) return;
+    
+    const key = e.key.toLowerCase();
+    
+    if ((key === "w" || e.key === "ArrowUp") && dy === 0) {
+        dx = 0; dy = -1;
+    }
+    else if ((key === "s" || e.key === "ArrowDown") && dy === 0) {
+        dx = 0; dy = 1;
+    }
+    else if ((key === "a" || e.key === "ArrowLeft") && dx === 0) {
+        dx = -1; dy = 0;
+    }
+    else if ((key === "d" || e.key === "ArrowRight") && dx === 0) {
+        dx = 1; dy = 0;
+    }
+});
 
 function startSnakeGame() {
-    snakeGame.active = true;
-    snakeGame.score = 0;
-    snake = [{ x: 10, y: 10 }];
+    if (snakeInterval) clearInterval(snakeInterval);
+    
+    initCanvas();
+
+    const savedHigh = localStorage.getItem("snake_highscore") || 0;
+    snakeState.highscore = parseInt(savedHigh);
+    document.getElementById("snake-highscore").textContent = snakeState.highscore;
+
+    snakeState.active = true;
+    snakeState.score = 0;
+    document.getElementById("snake-score").textContent = "0";
+
+    snake = [
+        { x: 12, y: 12 },
+        { x: 11, y: 12 },
+        { x: 10, y: 12 }
+    ];
+    
     dx = 1; dy = 0;
-    document.getElementById("snake-menu").style.display = "none";
-    gameLoop();
+    
+    spawnFood();
+    switchSnakeScreen("snake-play-screen");
+    draw();
+
+    setTimeout(() => {
+        if (snakeState.active) {
+            snakeInterval = setInterval(gameLoop, snakeState.speed);
+        }
+    }, 500);
 }
 
 function gameLoop() {
-    if (!snakeGame.active) return;
+    if (!snakeState.active) return;
+    update();
+    draw();
+}
 
-    let head = { x: snake[0].x + dx, y: snake[0].y + dy };
-    
-    // Wall collision
-    if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20) {
-        snakeGame.active = false;
-        alert("Game Over! Score: " + snakeGame.score);
-        document.getElementById("snake-menu").style.display = "block";
-        return;
+function update() {
+    const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+    if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+        return endGame();
+    }
+
+    for (let i = 0; i < snake.length; i++) {
+        if (snake[i].x === head.x && snake[i].y === head.y) return endGame();
     }
 
     snake.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
-        snakeGame.score++;
-        food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
-        if (snakeGame.score === 10) {
-            alert("Hint: VE ❤️");
+        snakeState.score++;
+        document.getElementById("snake-score").textContent = snakeState.score;
+        
+        if (snakeState.score > snakeState.highscore) {
+            snakeState.highscore = snakeState.score;
+            document.getElementById("snake-highscore").textContent = snakeState.highscore;
+            localStorage.setItem("snake_highscore", snakeState.highscore);
+        }
+
+        spawnFood();
+        if (snakeState.score === snakeState.goal && !snakeState.isFreeMode) {
+            unlockSnakeHint();
         }
     } else {
         snake.pop();
     }
+}
 
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 300, 300);
-    ctx.fillStyle = "lime";
-    snake.forEach(s => ctx.fillRect(s.x * 15, s.y * 15, 14, 14));
-    ctx.fillStyle = "red";
-    ctx.fillRect(food.x * 15, food.y * 15, 14, 14);
+function draw() {
+    if (!ctx) return;
 
-    setTimeout(gameLoop, 100);
+    // CLEAR BG
+    ctx.fillStyle = snakeState.items.bgColor || "#000";
+    ctx.fillRect(0, 0, 500, 500);
+
+    // GRID
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= tileCount; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, 500);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(500, i * gridSize);
+        ctx.stroke();
+    }
+
+    // FOOD
+    ctx.fillStyle = snakeState.items.foodColor || "red";
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = snakeState.items.foodColor || "red";
+    ctx.fillRect(food.x * gridSize + 2, food.y * gridSize + 2, gridSize - 4, gridSize - 4);
+    ctx.shadowBlur = 0;
+
+    // SNAKE
+    snake.forEach((segment, index) => {
+        ctx.fillStyle = (index === 0) ? "#ffffff" : (snakeState.items.snakeColor || "lime");
+        ctx.fillRect(segment.x * gridSize + 1, segment.y * gridSize + 1, gridSize - 2, gridSize - 2);
+    });
+}
+
+function spawnFood() {
+    let newX, newY;
+    let isOccupied = true;
+    let attempts = 0;
+
+    while (isOccupied && attempts < 100) {
+        newX = Math.floor(Math.random() * tileCount);
+        newY = Math.floor(Math.random() * tileCount);
+        
+        isOccupied = snake.some(segment => segment.x === newX && segment.y === newY);
+        attempts++;
+    }
+
+    food = { x: newX, y: newY };
+}
+
+function unlockSnakeHint() {
+    snakeState.active = false;
+    clearInterval(snakeInterval);
+    playSound("win");
+    switchSnakeScreen("snake-hint-screen");
+}
+
+function activateSnakeFreeMode() {
+    snakeState.isFreeMode = true;
+    snakeState.active = true;
+    switchSnakeScreen("snake-play-screen");
+    snakeInterval = setInterval(gameLoop, snakeState.speed);
+}
+
+function endGame() {
+    snakeState.active = false;
+    clearInterval(snakeInterval);
+    playSound("error");
+    
+    document.getElementById("snake-final-score").textContent = snakeState.score;
+    switchSnakeScreen("snake-gameover-screen");
+}
+
+function restartSnakeGame() {
+    startSnakeGame();
+}
+
+function closeSnakeWindow() {
+    snakeState.active = false;
+    if (snakeInterval) clearInterval(snakeInterval);
+    
+    const win = document.getElementById("snake-window");
+    if (win) {
+        win.style.display = "none";
+        win.classList.add("hidden");
+    }
+    
+    const taskItem = document.querySelector('.task-item[data-task="snake"]');
+    if (taskItem) {
+        taskItem.remove();
+    }
+
+    switchSnakeScreen("snake-menu-screen");
+}
+function switchSnakeScreen(id) {
+    document.querySelectorAll(".snake-screen").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+
+// === SETTINGS FOR SNAKE ===
+function setSnakeColor(color, btnElement) {
+    snakeState.items.snakeColor = color;
+    
+    btnElement.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    btnElement.classList.add('selected');
+        playSound("click");
+}
+
+function setSnakeFoodItem(type, btnElement) {
+    if (type === 'apple') snakeState.items.foodColor = 'red';
+    else if (type === 'mouse') snakeState.items.foodColor = '#888';
+    
+    btnElement.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+    btnElement.classList.add('selected');
+    playSound("click");
+}
+function setSnakeBgColor(color) {
+    snakeState.items.bgColor = color;
+    playSound("click");
 }
 
 // ===== 7) LUCKY CLICKER =====
@@ -295,9 +640,14 @@ if (clickTarget) {
         
         updateClickerUI();
         spawnFloatingNumber(e.clientX, e.clientY, value);
-        clickSFX.pause();
-        clickSFX.currentTime = 0;
-        clickSFX.play();
+        if (fartMode) {
+            fartSound.currentTime = 0;
+            fartSound.play();
+        } else {
+            clickSFX.pause();
+            clickSFX.currentTime = 0;
+            clickSFX.play();
+        }
         checkGoal();
     });
 }
@@ -411,37 +761,172 @@ function spawnFloatingNumber(x, y, val) {
 
 // ===== 8) GUESS THE SONG =====
 const playlist = [
-    { title: "Mamma Mia", file: "assets/SONGS/song1.mp3" },
-    { title: "Stayin Alive", file: "assets/SONGS/song2.mp3" }
+    { title: "Nirvana", artist: "PANOPTIKO", date: "2025", file: "assets/GUESSTHESONG/AUDIOS/Nirvana.wav", cover: "assets/GUESSTHESONG/COVERS/NirvanaCover.jpg" },
+    { title: "Myslivecky Ples", artist: "Kabat", date: "2015", file: "assets/GUESSTHESONG/AUDIOS/MysliveckyPles.wav", cover: "assets/GUESSTHESONG/COVERS/MysliveckyPles.jpg" },
+    { title: "Racks Blue", artist: "Nine Vicious", date: "2026", file: "assets/GUESSTHESONG/AUDIOS/RacksBlue.wav", cover: "assets/GUESSTHESONG/COVERS/RacksBlue.jpg" },
+    { title: "Sukat Psa Do Prdele", artist: "Vyebaney Robot", date: "2024", file: "assets/GUESSTHESONG/AUDIOS/SukatPsaDoPrdele.wav", cover: "assets/GUESSTHESONG/COVERS/SukatPsaDoPrdele.jpg" },
+    { title: "Viva Moldova", artist: "Satoshi", date: "2026", file: "assets/GUESSTHESONG/AUDIOS/VivaMoldova.wav", cover: "assets/GUESSTHESONG/COVERS/VivaMoldova.jpg" },
+    { title: "Totes Fleisch", artist: "Miss Construction", date: "2008", file: "assets/GUESSTHESONG/AUDIOS/TotesFleisch.wav", cover: "assets/GUESSTHESONG/COVERS/TotesFleisch.jpg" },
+    { title: "Loco", artist: "Yeat", date: "2025", file: "assets/GUESSTHESONG/AUDIOS/Loco.wav", cover: "assets/GUESSTHESONG/COVERS/Loco.jpg" },
+    { title: "Mozartovy Kule", artist: "PANOPTIKO", date: "2023", file: "assets/GUESSTHESONG/AUDIOS/MozartovyKule.wav", cover: "assets/GUESSTHESONG/COVERS/MozartovyKule.jpg" },
+    { title: "Noc v Abbey Road", artist: "PANOPTIKO", date: "2025", file: "assets/GUESSTHESONG/AUDIOS/NocVAbbeyRoad.wav", cover: "assets/GUESSTHESONG/COVERS/NirvanaCover.jpg" },
+    { title: "BFM", artist: "asteria, Britney Manson, kets4eki", date: "2024", file: "assets/GUESSTHESONG/AUDIOS/BFM.wav", cover: "assets/GUESSTHESONG/COVERS/BFM.jpg" }
 ];
 
 function startSongGame() {
-    currentSong = 0;
+    currentSongIdx = 0;
     songScore = 0;
-    showSong();
+    switchSongScreen("song-play-screen");
+    loadCurrentSong();
 }
 
-function showSong() {
-    const audio = document.getElementById("game-audio");
-    audio.src = playlist[currentSong].file;
-    document.getElementById("song-play-screen").classList.remove("hidden");
-}
-
-function submitSong() {
-    const input = document.getElementById("song-input").value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const correct = playlist[currentSong].title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    if (input === correct) songScore++;
+function loadCurrentSong() {
+    const s = playlist[currentSongIdx];
+    gameAudio.src = s.file;
+    gameAudio.load();
     
-    currentSong++;
-    if (currentSong < playlist.length) {
-        showSong();
+    document.getElementById("current-song-num").textContent = currentSongIdx + 1;
+    document.getElementById("song-input").value = "";
+    document.getElementById("song-progress-bar").style.width = "0%";
+    
+    document.getElementById("time-current").textContent = "0:00";
+    
+    gameAudio.onloadedmetadata = () => {
+        document.getElementById("time-total").textContent = formatTime(gameAudio.duration);
+    };
+}
+
+function toggleAudio() {
+    const playBtn = document.getElementById("play-btn");
+    
+    if (gameAudio.paused) {
+        gameAudio.play();
+        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
     } else {
-        const result = (songScore / playlist.length) * 100;
-        let msg = `Game Over! Score: ${result}%`;
-        if (result >= 80) msg += " - Code part: FOREVER";
-        alert(msg);
+        gameAudio.pause();
+        playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     }
+}
+
+gameAudio.ontimeupdate = () => {
+    const pct = (gameAudio.currentTime / gameAudio.duration) * 100;
+    document.getElementById("song-progress-bar").style.width = pct + "%";
+    document.getElementById("time-current").textContent = formatTime(gameAudio.currentTime);
+};
+
+gameAudio.onended = () => {
+    document.getElementById("play-btn").innerHTML = '<i class="fa-solid fa-play"></i>';
+};
+
+function checkSongAnswer() {
+    const input = document.getElementById("song-input").value.trim().toLowerCase();
+    const correct = playlist[currentSongIdx].title.toLowerCase();
+
+    if (input === correct) {
+        songScore++;
+        playSound("success");
+        showRevealScreen();
+    } else {
+        playSound("error");
+        showRevealScreen(false); 
+    }
+}
+
+function showRevealScreen(isCorrect = true) {
+    gameAudio.pause();
+    const s = playlist[currentSongIdx];
+    
+    document.getElementById("reveal-title").textContent = s.title;
+    document.getElementById("reveal-artist").textContent = s.artist;
+    document.getElementById("reveal-date").textContent = s.date;
+    document.getElementById("reveal-cover").src = s.cover;
+    
+    const h2 = document.querySelector("#song-reveal-screen h2");
+    h2.textContent = isCorrect ? "CORRECT!" : "WRONG...";
+    h2.style.color = isCorrect ? "lime" : "red";
+
+    if (currentSongIdx === playlist.length - 1) {
+        document.getElementById("next-song-btn").textContent = "Finish";
+    } else {
+        document.getElementById("next-song-btn").textContent = "Next";
+    }
+
+    switchSongScreen("song-reveal-screen");
+}
+
+function nextSong() {
+    if (currentSongIdx < playlist.length - 1) {
+        currentSongIdx++;
+        switchSongScreen("song-play-screen");
+        loadCurrentSong();
+    } else {
+        showEndScreen();
+    }
+}
+
+function showEndScreen() {
+    const pct = Math.floor((songScore / playlist.length) * 100);
+    document.getElementById("result-bar-fill").style.width = pct + "%";
+    document.getElementById("result-percent-text").textContent = pct + "%";
+    
+    const msg = document.getElementById("result-message");
+    const retryBtn = document.getElementById("retry-btn");
+
+    if (pct >= 80) {
+        playSound("win");
+        msg.innerHTML = `GREAT JOB! 🎉<br><br><span style="color: gold;">3. HINT: 4</span>`;
+        retryBtn.classList.add("hidden");
+    } else {
+        playSound("error");
+        msg.textContent = "That's not enough (you need at least 80%). Try it again!";
+        retryBtn.classList.remove("hidden");
+    }
+    switchSongScreen("song-end-screen");
+}
+
+function restartSongGame() {
+    startSongGame();
+}
+
+function switchSongScreen(id) {
+    document.querySelectorAll(".song-screen").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+}
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+function closeSongWindow() {
+    if (gameAudio) {
+        gameAudio.pause();
+        gameAudio.currentTime = 0;
+        gameAudio.src = ""; 
+    }
+    
+    const win = document.getElementById("guessthesong-window");
+    if (win) {
+        win.style.display = "none";
+        win.classList.add("hidden");
+    }
+    
+    const taskItem = document.querySelector('.task-item[data-task="guessthesong"]');
+    if (taskItem) {
+        taskItem.remove();
+    }
+
+    currentSongIdx = 0;
+    songScore = 0;
+    
+    const songInput = document.getElementById("song-input");
+    if (songInput) songInput.value = "";
+    
+    const playBtn = document.getElementById("play-btn");
+    if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+
+    switchSongScreen("song-start-screen");
 }
 
 // ===== DRAG WINDOWS =====
@@ -455,7 +940,6 @@ document.addEventListener("mousedown", (e) => {
         isDragging = true;
         currentWindow = header.closest(".window");
         
-        // Výpočet, kde přesně jsme okno chytli
         const rect = currentWindow.getBoundingClientRect();
         offset.x = e.clientX - rect.left;
         offset.y = e.clientY - rect.top;
@@ -469,9 +953,20 @@ document.addEventListener("mousedown", (e) => {
 document.addEventListener("mousemove", (e) => {
     if (!isDragging || !currentWindow) return;
 
-    // Nová pozice podle pohybu myši
+    const maxWidth = window.innerWidth;
+    const maxHeight = window.innerHeight;
+
+    const winWidth = currentWindow.offsetWidth;
+    const winHeight = currentWindow.offsetHeight;
+
     let x = e.clientX - offset.x;
     let y = e.clientY - offset.y;
+
+    if (x < 0) x = 0;
+    if (x + winWidth > maxWidth) x = maxWidth - winWidth;
+
+    if (y < 0) y = 0;
+    if (y + winHeight > maxHeight - 40) y = maxHeight - winHeight - 40; 
 
     currentWindow.style.left = x + "px";
     currentWindow.style.top = y + "px";
@@ -487,3 +982,137 @@ document.addEventListener("mouseup", () => {
 });
 
 document.addEventListener("mouseup", () => { isDragging = false; activeWindow = null; });
+
+// ===== FART MODE =====
+function toggleFartMode() {
+    fartMode = !fartMode;
+    const btn = document.getElementById("fart-toggle-btn");
+    if(btn) btn.textContent = fartMode ? "Fart Mode: ON" : "Fart Mode: OFF";
+    playSound("click");
+}
+
+// ===== STATS =====
+setInterval(() => {
+    const statsEl = document.getElementById("system-stats");
+    if(statsEl) {
+        const date = new Date().toLocaleString("cs-CZ");
+        statsEl.innerHTML = `System Time: ${date}<br><br>Lines of code: 2963`;
+    }
+}, 1000);
+
+// ===== TRASH BIN =====
+function openTrash() {
+    playSound("open");
+    trashClicks = 0;
+    document.getElementById("trash-photo").style.transform = "scale(1)";
+    document.getElementById("trash-hint").classList.add("hidden");
+    document.getElementById("trash-easteregg").classList.remove("hidden");
+}
+
+function clickTrashYes() {
+    trashClicks++;
+    playSound("error");
+    
+    const scale = 1 + (trashClicks * 0.15);
+    document.getElementById("trash-photo").style.transform = `scale(${scale})`;
+    
+    if (trashClicks >= 8) {
+        playSound("win");
+        document.getElementById("trash-hint").classList.remove("hidden");
+    }
+}
+
+// ===== SECRET CHEAT CODE =====
+const secretCode = "2410";
+let currentInput = "";
+
+// Najdeme všechny bannery
+document.querySelectorAll('.hint-banner').forEach(banner => {
+    banner.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        currentInput += id;
+
+        if (!secretCode.startsWith(currentInput)) {
+            currentInput = id;
+            
+            if (!secretCode.startsWith(currentInput)) {
+                currentInput = "";
+            }
+        }
+
+        if (currentInput === secretCode) {
+            showSecretHint();
+            currentInput = "";
+        }
+    });
+});
+
+function showSecretHint() {
+    const hintDiv = document.getElementById("secret-hint-display");
+    hintDiv.style.display = "block";
+    playSound("success");
+    
+    setTimeout(() => {
+        hintDiv.style.display = "none";
+    }, 5000);
+}
+
+// MOBILE BLOCKER
+function checkDevice() {
+    const blocker = document.getElementById('mobile-blocker');
+    if (window.innerWidth <= 1024) {
+        if (blocker) blocker.style.display = 'flex';
+    } else {
+        if (blocker) blocker.style.display = 'none';
+    }
+}
+
+window.addEventListener('load', checkDevice);
+window.addEventListener('resize', checkDevice);
+
+// SECRET GALLERY
+function openGallery() {
+    console.log("Funkce openGallery byla spuštěna!"); 
+    
+    const win = document.getElementById("gallery-window");
+    
+    if (!win) {
+        console.error("Okno gallery-window neexistuje!");
+        return;
+    }
+
+    win.classList.remove("hidden");
+
+    win.style.display = "flex";
+
+    if (typeof highestZ !== 'undefined') {
+        highestZ++;
+        win.style.zIndex = highestZ;
+    } else {
+        win.style.zIndex = 999999; 
+    }
+
+    if (!win.style.top || win.style.top === "0px") {
+        win.style.top = "150px";
+        win.style.left = "200px";
+    }
+
+    if (typeof playSound === "function") playSound("open");
+
+    if (typeof addToTaskbar === "function") {
+        addToTaskbar("gallery", win, "assets/key.gif");
+    }
+}
+
+function closeGalleryWindow() {
+    const win = document.getElementById("gallery-window");
+    if (win) {
+        win.style.display = "none";
+        win.classList.add("hidden");
+    }
+    
+    const taskItem = document.querySelector('.task-item[data-task="gallery"]');
+    if (taskItem) {
+        taskItem.remove();
+    }
+}
