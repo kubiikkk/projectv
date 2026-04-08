@@ -380,7 +380,7 @@ function switchSecretScreen(screenId) {
 // ===== 5) SETTINGS & SOUNDS =====
 function setWallpaper(name) {
     const wallpaperDiv = document.getElementById("wallpaper");
-    const imageUrl = `assets/WALLPAPERS/${name}`;
+    const imageUrl = `assets/WALLPAPERS/${name}.jpg`;
 
     const img = new Image();
     img.src = imageUrl;
@@ -996,7 +996,7 @@ setInterval(() => {
     const statsEl = document.getElementById("system-stats");
     if(statsEl) {
         const date = new Date().toLocaleString("cs-CZ");
-        statsEl.innerHTML = `System Time: ${date}<br><br>Lines of code: 2963`;
+        statsEl.innerHTML = `System Time: ${date}<br><br>Lines of code: 4762`;
     }
 }, 1000);
 
