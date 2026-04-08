@@ -112,6 +112,10 @@ html, body {
     overflow: hidden;
 }
 
+body.dragging {
+    user-select: none;
+}
+
 /* ===== BOOT SCREEN ===== */
 #boot-screen {
     position: fixed;
@@ -356,6 +360,11 @@ button {
     position: absolute;
     flex-direction: column;
     z-index: 10;
+}
+
+.window.dragging {
+    user-select: none;
+    pointer-events: none;
 }
 
 .hidden {
