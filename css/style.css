@@ -347,7 +347,7 @@ button {
     width: 400px;
     height: 600px;
 
-    resize: both;
+    resize: none;
     overflow: hidden;
     min-width: 250px;
     min-height: 200px;
@@ -448,7 +448,7 @@ button {
     position: fixed;
     left: 125px;
     right: 125px;
-    bottom: 90px;
+    bottom: 75px;
 
     height: 40px;
 
@@ -997,15 +997,15 @@ position: relative;
 
 /* ===== MEMORIES & TIMELINE ===== */
 #memories-window {
-    width: 1200px;
-    height: 800px;
+    width: 1000px;
+    height: 600px;
     background: #dfdfdf;
 }
 
 .memories-scroll {
     overflow-y: auto;
     background: #f0f0f0;
-    padding: 40px 10px;
+    padding: 20px 10px;
 }
 
 
@@ -1333,7 +1333,7 @@ position: relative;
 
 /* ===== SNAKE ===== */
 #snake-window {
-    width: 650px; height: 800px;
+    width: 650px; height: 600px;
     background: #c0c0c0; border: 3px solid black;
 }
 
@@ -1362,20 +1362,21 @@ position: relative;
     background-size: 20px 20px;
 }
 
-.snake-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; gap: 20px; }
+.snake-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; gap: 5px; }
 
 .snake-title-zone { text-align: center; margin-bottom: 30px; }
 .snake-logo-image { width: 100px; height: 100px; image-rendering: pixelated; margin-bottom: 15px; }
 .retro-title-snake { font-family: 'PressStart', sans-serif; font-size: 18px; color: #008000; text-shadow: 2px 2px #000; }
 
 .snake-header-stats {
-    display: flex; gap: 20px; width: 90%; justify-content: center; margin-top: 10px;
+    display: flex; gap: 20px; width: 90%; justify-content: center; margin-top: 0px;
 }
 .stat-box-xp {
     background: #1a1a1a;
     color: lime;
     border: 2px solid #444;
-    padding: 5px 15px;
+    padding: 10px 20px;
+    font-size: 16px;
     font-family: 'PressStart', sans-serif;
     font-weight: bold;
 }
@@ -1390,8 +1391,8 @@ position: relative;
 }
 
 #gameCanvas {
-    width: 500px; 
-    height: 500px;
+    width: 450px; 
+    height: 450px;
     display: block;
     background-color: #000;
 }
@@ -1470,14 +1471,14 @@ position: relative;
     color: #00ff00;
     font-family: 'PressStart', sans-serif;
     text-align: center;
-    height: 200px;
-    width: 1000px;
+    height: 700px;
+    width: 700px;
     min-height: 100%;
 }
 
 #guessthesong-window {
-    height: 800px;
-    width: 1000px;
+    height: 700px;
+    width: 700px;
 }
 
 .song-screen { 
@@ -1485,8 +1486,8 @@ position: relative;
     flex-direction: column; 
     align-items: center; 
     justify-content: center; 
-    height: 200px;
-    width: 1000px;
+    height: 700px;
+    width: 700px;
     min-height: 100%;
     gap: 20px; 
 }
