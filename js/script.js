@@ -19,15 +19,15 @@ let clickerState = {
     goal: 1500000,
     isFreeMode: false,
     costs: { 
-        clickupg: 20, 
-        cpsupg: 150, 
-        multupg: 1000, 
-        cpsupg2: 5000, 
-        clickupg2: 15000, 
-        multupg2: 50000, 
-        clickupg3: 150000, 
-        cpsupg3: 400000, 
-        multupg3: 800000 
+        clickupg: 20,
+        cpsupg: 120,
+        multupg: 800,
+        cpsupg2: 4500,
+        clickupg2: 12000,
+        multupg2: 40000,
+        clickupg3: 150000,
+        cpsupg3: 350000,
+        multupg3: 750000
     }
 };
 
@@ -659,21 +659,24 @@ function buyClickerUpgrade(type) {
         clickerState.clicks -= cost;
         clickerState.upgradesBought++;
         
-        // --- LOGIKA UPGRADŮ ---
+        // EARLY GAME
         if (type === 'clickupg') clickerState.perClick += 1;
-        else if (type === 'cpsupg') clickerState.autoCPS += 3;
+        else if (type === 'cpsupg') clickerState.autoCPS += 4; 
         else if (type === 'multupg') clickerState.multiplier *= 1.25;
-        else if (type === 'cpsupg2') clickerState.autoCPS += 15;
-        else if (type === 'clickupg2') clickerState.perClick += 60;
-        else if (type === 'multupg2') clickerState.multiplier *= 1.75;
-        else if (type === 'clickupg3') clickerState.perClick += 250;
-        else if (type === 'cpsupg3') clickerState.autoCPS += 150;
-        else if (type === 'multupg3') clickerState.multiplier *= 3;
+        
+        // MID GAME
+        else if (type === 'cpsupg2') clickerState.autoCPS += 35; 
+        else if (type === 'clickupg2') clickerState.perClick += 65; 
+        else if (type === 'multupg2') clickerState.multiplier *= 1.6;
+        
+        // END GAME
+        else if (type === 'clickupg3') clickerState.perClick += 450; 
+        else if (type === 'cpsupg3') clickerState.autoCPS += 1200; 
+        else if (type === 'multupg3') clickerState.multiplier *= 2.8;
 
-        clickerState.costs[type] *= 1.55; 
+        clickerState.costs[type] *= 1.42; 
         
         updateClickerUI();
-        
         playSound('buy', 0.4); 
     } else {
         playSound('error', 0.5);
